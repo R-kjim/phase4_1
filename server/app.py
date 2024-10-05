@@ -55,7 +55,10 @@ def get_power(id):
             # for attr in request.form:
             #     setattr(power, attr, request.form.get(attr))
             description=data.get('description')
-            power.description=description
+            if len(description)<20:
+                return {"errors":["validation errors"]},400
+            else:
+                power.description=description
             try:
                 # db.session.add(power)
                 db.session.commit()
@@ -63,13 +66,17 @@ def get_power(id):
             except:
                 return {
                     "errors":["validation errors"]
-                }
+                },400
     else:
         return {"error": "Power not found"},404
     
 @app.route('/hero_powers',methods=['POST'])
 def post_power():
     data = request.get_json()
+    if data['strength'] not in ["Strong","Weak","Average"]:
+        return {
+            "errors":["validation errors"]
+        },400
     new_power=HeroPower(
         strength=data['strength'],
         power_id=data['power_id'],
@@ -78,7 +85,7 @@ def post_power():
     try:
         db.session.add(new_power)
         db.session.commit()
-        return new_power.to_dict(),201
+        return new_power.to_dict(),200
     except:
         return {
             "errors":["validation errors"]

@@ -19,7 +19,7 @@ class Hero(db.Model, SerializerMixin):
     super_name = db.Column(db.String)
 
     # add relationship
-    hero_powers=db.relationship('HeroPower', back_populates='heroes')
+    hero_powers=db.relationship('HeroPower', back_populates='hero')
     # add serialization rules
     serialize_rules=('-hero_powers',)
 
@@ -35,7 +35,7 @@ class Power(db.Model, SerializerMixin):
     description = db.Column(db.String)
 
     # add relationship
-    heros_powers=db.relationship('HeroPower', back_populates='powers')
+    heros_powers=db.relationship('HeroPower', back_populates='power')
     # add serialization rules
     serialize_rules=('-heros_powers',)
     # add validation
@@ -60,11 +60,11 @@ class HeroPower(db.Model, SerializerMixin):
     power_id=db.Column(db.Integer, db.ForeignKey('powers.id'))
 
     # add relationships
-    powers=db.relationship('Power', back_populates='heros_powers')
-    heroes=db.relationship('Hero',back_populates='hero_powers')
+    power=db.relationship('Power', back_populates='heros_powers')
+    hero=db.relationship('Hero',back_populates='hero_powers')
     
     # add serialization rules
-    serialize_rules = ('-hero.hero_powers', '-power.heros_powers')
+    serialize_rules = ('-hero.hero_powers', '-power.hero_powers')
 
     # add validation
     strengths=['Strong',"Weak","Average"]

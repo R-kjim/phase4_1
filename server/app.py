@@ -91,6 +91,10 @@ def post_power():
             "errors":["validation errors"]
         }
 
+@app.route('/heroPowers')
+def heroPower():
+    heroPowers=HeroPower.query.all()
+    return [power.to_dict() for power in heroPowers],200
 
 
 if __name__ == '__main__':
